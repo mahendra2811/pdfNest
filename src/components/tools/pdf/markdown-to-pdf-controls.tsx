@@ -3,13 +3,19 @@
 import { useCallback } from "react";
 import { motion } from "framer-motion";
 import { FileText, Download, RefreshCw, Eye } from "lucide-react";
-import DOMPurify from "dompurify";
 import { ProcessingIndicator } from "@/components/shared/processing-indicator";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useMarkdownToPdf } from "@/hooks/use-markdown-to-pdf";
 import { downloadBlob } from "@/lib/utils/download-helpers";
+
+function sanitize(html: string): string {
+  if (typeof window === "undefined") return "";
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const DOMPurify = (require("dompurify") as typeof import("dompurify")).default;
+  return DOMPurify.sanitize(html);
+}
 
 const SAMPLE_MARKDOWN = `# Hello World
 
@@ -90,7 +96,7 @@ export function MarkdownToPdfControls(): React.ReactElement {
             </div>
             <div
               className="prose prose-sm dark:prose-invert max-w-none max-h-64 overflow-y-auto rounded-lg border border-border p-4 bg-white dark:bg-zinc-900"
-              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(htmlPreview) }}
+              dangerouslySetInnerHTML={{ __html: sanitize(htmlPreview) }}
             />
           </CardContent>
         </Card>

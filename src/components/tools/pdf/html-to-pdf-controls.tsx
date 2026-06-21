@@ -3,10 +3,16 @@
 import { useState, useCallback, useRef } from "react";
 import { motion } from "framer-motion";
 import { Code, FileDown, Eye, Loader2 } from "lucide-react";
-import DOMPurify from "dompurify";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+
+function sanitize(html: string): string {
+  if (typeof window === "undefined") return "";
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const DOMPurify = (require("dompurify") as typeof import("dompurify")).default;
+  return DOMPurify.sanitize(html);
+}
 
 const DEFAULT_HTML = `<h1 style="color: #333; font-family: sans-serif;">Hello World</h1>
 <p style="font-size: 16px; line-height: 1.6;">
@@ -71,7 +77,7 @@ export function HtmlToPdfControls(): React.ReactElement {
             <div
               ref={previewRef}
               className="prose prose-sm max-w-none dark:prose-invert"
-              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }}
+              dangerouslySetInnerHTML={{ __html: sanitize(html) }}
             />
           </CardContent>
         </Card>
