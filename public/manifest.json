@@ -1,0 +1,42 @@
+{
+  "name": "pdfNest — Free PDF Tools",
+  "short_name": "pdfNest",
+  "description": "Free online PDF tools — 100% browser-based, no upload, no sign-up.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fafafa",
+  "theme_color": "#ef4444",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["utilities", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Merge PDF",
+      "url": "/tools/pdf-merge",
+      "description": "Combine multiple PDFs into one"
+    },
+    {
+      "name": "Compress PDF",
+      "url": "/tools/pdf-compress",
+      "description": "Reduce PDF file size"
+    },
+    {
+      "name": "PDF to JPG",
+      "url": "/tools/pdf-to-jpg",
+      "description": "Convert PDF pages to images"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "merchant": "pdfnest",
+  "githubRepo": "git@github.com:mahendra2811/pdfNest.git",
+  "compulsory": [
+    { "key": "projectRoot", "description": "Absolute path where the app is scaffolded.", "value": "/home/pooniya/Documents/p_project/a_Web/pdfNest" },
+    { "key": "appName", "description": "Brand/app name used in titles, SEO, manifest.", "value": "pdfNest" }
+  ],
+  "optional": [
+    { "key": "analytics", "unlocks": "Page/event analytics. App fully works without it (no-op when unset).", "envVar": "NEXT_PUBLIC_GA_MEASUREMENT_ID", "provided": false },
+    { "key": "ads", "unlocks": "AdSense slots on non-tool pages. Slots render nothing when unset.", "envVar": "NEXT_PUBLIC_ADSENSE_CLIENT_ID", "provided": false },
+    { "key": "contactForm", "unlocks": "Contact/feedback form submission via Formspree. Hidden/disabled when unset.", "envVar": "NEXT_PUBLIC_FORMSPREE_ID", "provided": false },
+    { "key": "sentry", "unlocks": "Client error monitoring. No-op when DSN unset.", "envVar": "NEXT_PUBLIC_SENTRY_DSN", "provided": false },
+    { "key": "domain", "unlocks": "Canonical URLs, sitemap absolute URLs, OG image base. Defaults to relative/localhost when unset.", "envVar": "NEXT_PUBLIC_SITE_URL", "provided": false },
+    { "key": "logo", "unlocks": "Custom brand logo SVG; default text/icon mark used otherwise.", "envVar": null, "provided": false }
+  ]
+}

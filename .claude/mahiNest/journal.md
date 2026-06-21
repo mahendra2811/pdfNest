@@ -1,0 +1,2 @@
+- 2026-06-22T01:34:17+05:30 Phase 0 START — ingest port brief (26 live + 12 soon PDF tools from FixTools).
+- 2026-06-22T01:34:17+05:30 Phase 0 END — spec + manifest + requirements written; ready to scaffold (Phase 1).
