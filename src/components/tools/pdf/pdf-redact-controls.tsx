@@ -44,6 +44,15 @@ async function renderPdfPages(file: File): Promise<PageData[]> {
   return out;
 }
 
+function loadImageFromDataUrl(dataUrl: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error("Failed to load page image"));
+    img.src = dataUrl;
+  });
+}
+
 export function PdfRedactControls(): React.ReactElement {
   const [file, setFile] = useState<File | null>(null);
   const [pages, setPages] = useState<PageData[]>([]);
@@ -136,11 +145,23 @@ export function PdfRedactControls(): React.ReactElement {
         if (i > 0) {
           pdf.addPage([p.width, p.height], p.width > p.height ? "landscape" : "portrait");
         }
-        pdf.addImage(p.dataUrl, "JPEG", 0, 0, p.width, p.height);
-        pdf.setFillColor(0, 0, 0);
+        // Burn redactions into the page bitmap BEFORE encoding, so the original
+        // pixels are physically replaced with black and are unrecoverable. Never
+        // draw overlay rectangles on top of the original image (pdf.rect) — that
+        // leaves the sensitive pixels intact underneath and defeats redaction.
+        const rc = document.createElement("canvas");
+        rc.width = p.width;
+        rc.height = p.height;
+        const rctx = rc.getContext("2d");
+        if (!rctx) throw new Error("Canvas 2D context unavailable");
+        const pageImg = await loadImageFromDataUrl(p.dataUrl);
+        rctx.drawImage(pageImg, 0, 0, p.width, p.height);
+        rctx.fillStyle = "#000";
         for (const r of regions.filter((reg) => reg.page === i + 1)) {
-          pdf.rect(r.x * p.width, r.y * p.height, r.w * p.width, r.h * p.height, "F");
+          rctx.fillRect(r.x * p.width, r.y * p.height, r.w * p.width, r.h * p.height);
         }
+        const redactedDataUrl = rc.toDataURL("image/jpeg", 0.9);
+        pdf.addImage(redactedDataUrl, "JPEG", 0, 0, p.width, p.height);
       }
       const blob = pdf.output("blob");
       setOutput(blob);
