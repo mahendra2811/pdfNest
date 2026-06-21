@@ -58,3 +58,62 @@
 - All tools: direct import in Server Component page (no `dynamic(ssr:false)`)
 - All tools: `ProcessingIndicator progress={number}` not `state={state}`
 - All tools: Slider uses `@base-ui/react` API with `(v: number | readonly number[])` callback type
+
+## Phase 3: Port Gotchas (tools 4–26)
+
+### 10. `react-hooks/set-state-in-effect` from `eslint-config-next` blocks synchronous setState in useEffect
+
+- ANY `setState()` call that appears synchronously in a `useEffect` body (even the very first `setLoading(true)`) triggers this ESLint error
+- **Fix:** Wrap ALL setState calls inside an async `run()` function declared inside the effect:
+  ```tsx
+  useEffect(() => {
+    if (!file) return;
+    let cancelled = false;
+    const run = async (): Promise<void> => {
+      if (cancelled) return;
+      setLoading(true);          // OK — inside async function, not directly in effect body
+      try { ... } catch { ... }
+    };
+    void run();
+    return () => { cancelled = true; };
+  }, [file]);
+  ```
+- Applies to: pdf-redact, pdf-sign, pdf-to-png, pdf-extract-images, and any future tool that renders pdfjs pages on file select
+
+### 11. `DownloadButton` API: no `processedSize` prop
+
+- FixTools `<DownloadButton processedSize={...} />` — has `processedSize`
+- pdfNest `DownloadButton` API: `{ blob, fileName, originalSize?, label?, className? }` — no `processedSize`
+- **Fix:** Remove `processedSize` prop; the button derives output size from `blob.size` internally
+
+### 12. Missing shared components from FixTools (do not attempt to import)
+
+- `PdfLivePreview`, `PdfThumbnailStrip`, `PdfThumbnailDragGrid`, `PdfThumbnailSelectGrid`, `PdfPageZoomModal`, `BeforeAfterSize`
+- **Fix:** Replace with inline alternatives: page-number button grids, drag cards, simple size display rows
+- `usePdfThumbnails` hook also absent; use direct pdfjs canvas render inside the component
+
+### 13. DOMPurify crashes during SSR (Next.js prerender)
+
+- `import DOMPurify from "dompurify"` at the top of a `"use client"` file is evaluated server-side during prerendering
+- `DOMPurify.sanitize` throws `TypeError: k.A.sanitize is not a function` on the server
+- **Fix:** Never top-level import DOMPurify; use a runtime guard:
+  ```ts
+  function sanitize(html: string): string {
+    if (typeof window === "undefined") return "";
+    const DOMPurify = (require("dompurify") as typeof import("dompurify")).default;
+    return DOMPurify.sanitize(html);
+  }
+  ```
+- Applies to: html-to-pdf, markdown-to-pdf, and any tool rendering user HTML in a preview
+
+### 14. `ProcessingState` type is not exported from pdfNest lib
+
+- FixTools imports `import type { ProcessingState } from "@/lib/types/processing"`
+- pdfNest `src/lib/types/` only has `tools.ts` — no `processing.ts`
+- **Fix:** Define a local inline `ProcessingState` interface at the top of each hook that needs it
+
+### 15. Slider from FixTools (`@/components/ui/slider`) uses different API in pdfNest
+
+- FixTools `<Slider value={[n]} onValueChange={(v) => setN(v[0])} />`
+- pdfNest has `@base-ui/react` Slider with different callback signature
+- **Fix:** Use native `<input type="range" className="accent-primary">` for all range inputs — avoids API mismatch entirely and is simpler
