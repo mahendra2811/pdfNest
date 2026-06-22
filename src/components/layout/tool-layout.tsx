@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { LIVE_TOOLS } from "@/lib/constants/tools";
 import { CATEGORY_LABELS } from "@/lib/constants/tools";
+import { siteConfig } from "@/config/site";
 import type { Tool } from "@/lib/types/tools";
 
 interface ToolLayoutProps {
@@ -33,16 +34,77 @@ export function ToolLayout({ tool, children }: ToolLayoutProps): React.ReactElem
 
   const gradient = CATEGORY_GRADIENTS[tool.category] ?? "from-red-500 to-rose-600";
 
-  // JSON-LD for SEO
-  const jsonLd = {
+  const toolUrl = `${siteConfig.url}/tools/${tool.slug}`;
+
+  // WebApplication JSON-LD
+  const webAppJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: `${tool.name} — pdfNest`,
-    url: `https://pdfnest.app/tools/${tool.slug}`,
+    url: toolUrl,
     applicationCategory: "UtilityApplication",
     operatingSystem: "Web Browser",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     description: tool.description,
+    featureList: tool.features,
+  };
+
+  // BreadcrumbList JSON-LD
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteConfig.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Tools",
+        item: `${siteConfig.url}/tools`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: tool.name,
+        item: toolUrl,
+      },
+    ],
+  };
+
+  // FAQPage JSON-LD — generic Q&A covering the most common user questions
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: `Is ${tool.name} free?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `Yes, ${tool.name} on pdfNest is completely free with no limits and no sign-up required.`,
+        },
+      },
+      {
+        "@type": "Question",
+        name: `Does ${tool.name} upload my files to a server?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `No. ${tool.name} runs entirely in your browser. Your files are never uploaded to any server — they stay on your device at all times.`,
+        },
+      },
+      {
+        "@type": "Question",
+        name: `What file size is supported by ${tool.name}?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `${tool.name} supports files up to ${Math.round(tool.maxFileSize / 1024 / 1024)} MB.`,
+        },
+      },
+    ],
   };
 
   return (
@@ -50,7 +112,15 @@ export function ToolLayout({ tool, children }: ToolLayoutProps): React.ReactElem
       {/* JSON-LD */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
       {/* Breadcrumb */}
@@ -162,8 +232,7 @@ export function ToolLayout({ tool, children }: ToolLayoutProps): React.ReactElem
                     React.ComponentType<{ className?: string }>
                   >
                 )[rt.icon];
-                const rtGradient =
-                  CATEGORY_GRADIENTS[rt.category] ?? "from-red-500 to-rose-600";
+                const rtGradient = CATEGORY_GRADIENTS[rt.category] ?? "from-red-500 to-rose-600";
                 return (
                   <Link key={rt.id} href={`/tools/${rt.slug}`}>
                     <Card className="group hover:border-primary/50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">

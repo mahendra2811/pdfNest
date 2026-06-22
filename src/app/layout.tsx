@@ -11,8 +11,21 @@ import { NavigationProgress } from "@/components/shared/navigation-progress";
 import { ServiceWorkerRegister } from "@/components/shared/sw-register";
 import { SwUpdateBanner } from "@/components/shared/sw-update-banner";
 import { ReducedMotionSync } from "@/components/shared/reduced-motion-sync";
+import { Analytics } from "@/components/shared/analytics";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
+
+// Site-wide Organization JSON-LD — static config only
+const ORG_JSONLD = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "pdfNest",
+  url: "https://pdfnest.app",
+  logo: "https://pdfnest.app/icons/icon-512.png",
+  description:
+    "Free online PDF tools — merge, split, compress, convert, sign and more. 100% browser-based, no upload, no sign-up.",
+  sameAs: ["https://github.com/mahendra2811/pdfNest"],
+} as const;
 
 const inter = Inter({
   subsets: ["latin"],
@@ -109,7 +122,19 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         {/* Splash bootstrap — runs before hydration */}
         <script dangerouslySetInnerHTML={{ __html: SPLASH_BOOTSTRAP }} />
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+        {/* Organization JSON-LD — site-wide */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_JSONLD) }}
+        />
+        {/* Analytics — env-gated; renders null when env vars absent */}
+        <Analytics />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
           <TooltipProvider>
             <Suspense fallback={null}>
               <NavigationProgress />
