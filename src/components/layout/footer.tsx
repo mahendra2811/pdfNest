@@ -19,9 +19,7 @@ export function Footer(): React.ReactElement {
                 <span className="text-primary">pdf</span>Nest
               </span>
             </div>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {STRINGS.tagline}
-            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">{STRINGS.tagline}</p>
             <div className="flex items-center gap-2 text-xs text-green-600 dark:text-green-400">
               <Shield className="h-3.5 w-3.5" />
               <span>100% browser-based — no server, no upload</span>
@@ -48,10 +46,7 @@ export function Footer(): React.ReactElement {
                     </li>
                   ))}
                   <li>
-                    <Link
-                      href="/tools"
-                      className="text-xs text-primary hover:underline"
-                    >
+                    <Link href="/tools" className="text-xs text-primary hover:underline">
                       View all tools →
                     </Link>
                   </li>
@@ -63,14 +58,41 @@ export function Footer(): React.ReactElement {
 
         <div className="border-t border-border pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs text-muted-foreground">{STRINGS.footerCopyright}</p>
-          <nav className="flex items-center gap-4">
-            <Link href="/about" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+          <nav className="flex flex-wrap items-center gap-4">
+            <Link
+              href="/about"
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
               About
             </Link>
-            <Link href="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+            <Link
+              href="/how-it-works"
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              How It Works
+            </Link>
+            <Link
+              href="/privacy"
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
               Privacy
             </Link>
-            <Link href="/tools" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+            <Link
+              href="/terms"
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Terms
+            </Link>
+            <Link
+              href="/contact"
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Contact
+            </Link>
+            <Link
+              href="/tools"
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
               All Tools
             </Link>
           </nav>

@@ -60,4 +60,19 @@ export const STRINGS = {
   // Coming soon
   comingSoon: "Coming Soon",
   comingSoonDescription: "This tool is under development and will be available soon.",
+  comingSoonToast: "This tool is coming soon! Follow pdfNest on GitHub for updates.",
+
+  // Pages
+  howItWorksTitle: "How pdfNest Works",
+  howItWorksSubtitle: "Every PDF operation runs entirely in your browser — no server involved.",
+  aboutTitle: "About pdfNest",
+  contactTitle: "Contact Us",
+  termsTitle: "Terms of Service",
+  privacyTitle: "Privacy Policy",
+
+  // Trust strip
+  trustClientSide: "100% client-side",
+  trustNoUpload: "No upload",
+  trustFree: "Completely free",
+  trustNoSignup: "No sign-up",
 } as const;

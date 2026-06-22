@@ -11,6 +11,7 @@ import {
   CATEGORIES,
   CATEGORY_LABELS,
 } from "@/lib/constants/tools";
+import { ComingSoonCard } from "@/components/home/coming-soon-card";
 import { siteConfig } from "@/config/site";
 import type { Metadata } from "next";
 
@@ -18,6 +19,16 @@ export const metadata: Metadata = {
   title: "pdfNest — Free Online PDF Tools | No Upload, 100% Private",
   description:
     "Free online PDF tools — merge, split, compress, convert, sign and more. 100% browser-based, no upload, no sign-up. Your PDFs never leave your device.",
+  alternates: {
+    canonical: siteConfig.url,
+  },
+  openGraph: {
+    title: "pdfNest — Free Online PDF Tools | No Upload, 100% Private",
+    description:
+      "Free online PDF tools — merge, split, compress, convert, sign and more. 100% browser-based, no upload.",
+    url: siteConfig.url,
+    type: "website",
+  },
 };
 
 const CATEGORY_GRADIENTS: Record<string, string> = {
@@ -28,7 +39,7 @@ const CATEGORY_GRADIENTS: Record<string, string> = {
   "other-to-pdf": "from-pink-500 to-red-500",
 };
 
-export default function HomePage() {
+export default function HomePage(): React.ReactElement {
   const liveCount = LIVE_TOOLS.length;
 
   return (
@@ -42,8 +53,7 @@ export default function HomePage() {
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4">
-            Your PDF toolkit,{" "}
-            <span className="text-primary">100% private.</span>
+            Your PDF toolkit, <span className="text-primary">100% private.</span>
           </h1>
 
           <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
@@ -68,7 +78,7 @@ export default function HomePage() {
             </Link>
           </div>
 
-          {/* Trust signals */}
+          {/* Trust strip */}
           <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground">
             <div className="flex items-center gap-1.5">
               <Shield className="h-3.5 w-3.5 text-green-500" />
@@ -91,10 +101,15 @@ export default function HomePage() {
       </section>
 
       {/* Featured tools */}
-      <section className="mx-auto max-w-5xl px-4 py-14 w-full">
+      <section className="mx-auto max-w-5xl px-4 py-14 w-full" aria-labelledby="featured-heading">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold">Popular PDF Tools</h2>
-          <Link href="/tools" className="text-sm text-primary hover:underline flex items-center gap-1">
+          <h2 id="featured-heading" className="text-2xl font-bold">
+            Popular PDF Tools
+          </h2>
+          <Link
+            href="/tools"
+            className="text-sm text-primary hover:underline flex items-center gap-1"
+          >
             View all <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
@@ -135,8 +150,10 @@ export default function HomePage() {
       </section>
 
       {/* All tools by category */}
-      <section className="mx-auto max-w-5xl px-4 pb-14 w-full">
-        <h2 className="text-2xl font-bold mb-8">All PDF Tools</h2>
+      <section className="mx-auto max-w-5xl px-4 pb-14 w-full" aria-labelledby="categories-heading">
+        <h2 id="categories-heading" className="text-2xl font-bold mb-8">
+          All PDF Tools
+        </h2>
         <div className="space-y-10">
           {CATEGORIES.map((cat) => {
             const tools = LIVE_TOOLS.filter((t) => t.category === cat);
@@ -184,21 +201,7 @@ export default function HomePage() {
                     );
                   })}
                   {soonTools.map((tool) => (
-                    <div key={tool.id} className="opacity-60 cursor-not-allowed">
-                      <Card className="h-full border-dashed">
-                        <CardContent className="p-3 flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center shrink-0">
-                            <FileText className="h-4 w-4 text-muted-foreground" />
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium leading-tight text-muted-foreground">
-                              {tool.name}
-                            </p>
-                            <p className="text-[10px] text-muted-foreground/70">Coming soon</p>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
+                    <ComingSoonCard key={tool.id} name={tool.name} />
                   ))}
                 </div>
               </div>
@@ -221,12 +224,20 @@ export default function HomePage() {
             files — they stay on your device at all times. No tracking, no storage, no account
             needed.
           </p>
-          <Link
-            href="/privacy"
-            className="text-sm text-primary hover:underline inline-flex items-center gap-1"
-          >
-            Read our privacy policy <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <Link
+              href="/how-it-works"
+              className="text-sm text-primary hover:underline inline-flex items-center gap-1"
+            >
+              How it works <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+            <Link
+              href="/privacy"
+              className="text-sm text-primary hover:underline inline-flex items-center gap-1"
+            >
+              Privacy policy <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
         </div>
       </section>
     </div>
