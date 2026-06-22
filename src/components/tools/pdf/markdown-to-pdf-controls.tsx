@@ -9,11 +9,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useMarkdownToPdf } from "@/hooks/use-markdown-to-pdf";
 import { downloadBlob } from "@/lib/utils/download-helpers";
+import DOMPurify from "dompurify";
 
 function sanitize(html: string): string {
+  // DOMPurify's no-op stub on the server returns input unchanged; the guard keeps
+  // unsanitized HTML out of any server-rendered output. Real sanitization runs in
+  // the browser where window (and a real DOM) exist.
   if (typeof window === "undefined") return "";
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const DOMPurify = (require("dompurify") as typeof import("dompurify")).default;
   return DOMPurify.sanitize(html);
 }
 

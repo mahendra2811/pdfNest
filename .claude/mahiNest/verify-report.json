@@ -1,0 +1,18 @@
+{
+  "merchant": "pdfnest",
+  "verdict": "SHIP",
+  "gate": {
+    "build": true,
+    "lint": true,
+    "tests": true,
+    "emptyEnv": true,
+    "everyItemE2E": true,
+    "a11yAA": true,
+    "pwaInstallable": true
+  },
+  "fixed": [
+    "html-to-pdf + markdown-to-pdf: runtime TypeError 'Cannot read properties of undefined (reading sanitize)' — require(\"dompurify\").default is undefined in DOMPurify 3.4.11 CJS build. Replaced with top-level ESM 'import DOMPurify from \"dompurify\"' + typeof window guard. Broke empty-env no-console-errors gate; re-verified CLEAN in headless Chrome after rebuild.",
+    "ProcessingIndicator: added role=progressbar + aria-valuemin/valuemax/valuenow + aria-label for screen-reader progress announcement."
+  ],
+  "needsRerun": []
+}

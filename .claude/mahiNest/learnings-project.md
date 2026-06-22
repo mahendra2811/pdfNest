@@ -117,3 +117,20 @@
 - FixTools `<Slider value={[n]} onValueChange={(v) => setN(v[0])} />`
 - pdfNest has `@base-ui/react` Slider with different callback signature
 - **Fix:** Use native `<input type="range" className="accent-primary">` for all range inputs — avoids API mismatch entirely and is simpler
+
+## Phase 5: QA findings
+
+### 16. DOMPurify `require(...).default` is undefined in v3.4.11 — use top-level ESM import
+
+- The Phase 3 fix (gotcha #13) used `require("dompurify").default` inside a `typeof window` guard. In DOMPurify 3.4.11 this `.default` is `undefined`, so `undefined.sanitize()` throws at runtime in the browser bundle: `TypeError: Cannot read properties of undefined (reading 'sanitize')`.
+- html-to-pdf threw on mount (preview rendered from DEFAULT_HTML); markdown-to-pdf had the same bug behind its preview toggle.
+- **Fix applied:** `import DOMPurify from "dompurify"` (top-level ESM) + keep `if (typeof window === "undefined") return ""` inside `sanitize()`. ESM default is a ready instance; server stub is harmless so prerender stays green. Files: html-to-pdf-controls.tsx, markdown-to-pdf-controls.tsx.
+
+### 17. ProcessingIndicator needed progressbar ARIA
+
+- Added `role="progressbar"` + `aria-valuemin/valuemax/valuenow` + `aria-label` to the wrapper.
+
+### 18. Non-blocking items for a future pass
+
+- pdf-redact `renderPdfPages` caps at 20 pages (`Math.min(20, numPages)`) — pages 21+ silently dropped from output. Add a user notice or remove cap.
+- `download-helpers.ts` top-level-imports JSZip (~95KB) and is imported by 23 components — convert the zip helper to a dynamic `import("jszip")` to slim shared bundles.

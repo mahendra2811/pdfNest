@@ -16,7 +16,14 @@ export function ProcessingIndicator({
   className,
 }: ProcessingIndicatorProps): React.ReactElement {
   return (
-    <div className={cn("flex flex-col items-center justify-center gap-4 py-10", className)}>
+    <div
+      className={cn("flex flex-col items-center justify-center gap-4 py-10", className)}
+      role="progressbar"
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={Math.round(progress)}
+      aria-label={label}
+    >
       <ProgressRing progress={progress} size={72} strokeWidth={6} />
       <div className="text-center space-y-1">
         <p className="text-sm font-medium">{label}</p>

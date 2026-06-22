@@ -1,5 +1,5 @@
 {
-  "phase": 3,
+  "phase": "ship",
   "buildPassed": true,
   "lintPassed": true,
   "testPassed": true,
@@ -12,6 +12,7 @@
   "claudeScaffoldPackComplete": true,
   "referenceItemsComplete": true,
   "phase3Complete": true,
+  "phase4Complete": true,
   "referenceItems": [
     {
       "slug": "pdf-merge",
@@ -60,6 +61,48 @@
     { "slug": "markdown-to-pdf", "status": "done", "engine": "marked+jsPDF" },
     { "slug": "text-to-pdf", "status": "done", "engine": "jsPDF" }
   ],
+  "phase4Items": {
+    "pages": [
+      { "route": "/", "status": "done" },
+      { "route": "/tools", "status": "done" },
+      { "route": "/how-it-works", "status": "done" },
+      { "route": "/about", "status": "done" },
+      { "route": "/privacy", "status": "done" },
+      { "route": "/terms", "status": "done" },
+      { "route": "/contact", "status": "done" },
+      { "route": "/favorites", "status": "done" },
+      { "route": "/history", "status": "done" },
+      { "route": "/~offline", "status": "done" },
+      { "route": "not-found", "status": "done" },
+      { "route": "error", "status": "done" }
+    ],
+    "seo": {
+      "perPageMetadata": true,
+      "canonical": true,
+      "openGraph": true,
+      "jsonLdWebApplication": true,
+      "jsonLdBreadcrumbList": true,
+      "jsonLdFAQPage": true,
+      "jsonLdOrganization": true,
+      "sitemap": "26 live tools + 8 static pages",
+      "robots": true,
+      "gscVerificationMeta": "env-gated NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION",
+      "ogImage": "src/app/opengraph-image.tsx (edge runtime, 1200x630)"
+    },
+    "analytics": {
+      "ga4": "env-gated NEXT_PUBLIC_GA_MEASUREMENT_ID via @next/third-parties",
+      "gtm": "env-gated NEXT_PUBLIC_GTM_ID via @next/third-parties",
+      "trackHelper": "src/lib/analytics/track.ts — no-op when env absent",
+      "adSlot": "src/components/shared/ad-slot.tsx — null until NEXT_PUBLIC_ADSENSE_CLIENT_ID+ENABLED",
+      "emptyEnvSafe": true
+    },
+    "pwa": {
+      "serwist": "finalized — pdf.worker excluded from precache (exclude: [/pdf.worker/])",
+      "manifest": "src/app/manifest.ts (Next.js dynamic route)",
+      "staticManifest": "public/manifest.json (retained for compatibility)",
+      "updateBanner": "improved with explicit Reload button + dismiss"
+    }
+  },
   "toolsImplemented": [
     "pdf-merge",
     "pdf-to-jpg",
@@ -92,6 +135,6 @@
   "blockedItems": [],
   "gitRemote": "git@github.com:mahendra2811/pdfNest.git",
   "gitPushed": false,
-  "lastUpdated": "2026-06-22T08:00:00Z",
-  "notes": "Phase 3 COMPLETE. All 26 live tools done (0 blocked). tsc: clean, lint: 0 errors, build: 26 static tool pages + 1 SSG [slug] page. DOMPurify SSR fix applied to html-to-pdf and markdown-to-pdf. Push to origin blocked by auto-mode — user must run: git push origin main. Phase 4 gate: PASS — all live tools real (none blocked)."
+  "lastUpdated": "2026-06-22T10:30:00Z",
+  "notes": "Phase 6 (ship) COMPLETE. README.md written (full tool table, privacy promise, local dev, env vars, no-op rule, Serwist --webpack note, Vercel deploy steps). vercel.json created. .env.example updated. LAUNCH_BRIEF.md written. Final commit staged. Awaiting user go-ahead for production deploy to Vercel."
 }
